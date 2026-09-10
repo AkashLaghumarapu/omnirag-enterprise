@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniRAG Enterprise — Agentic Corrective RAG & Multi-Vector Intelligence Engine</title>
+  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Markdown parser -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="dark-theme">
+  <!-- App Container -->
+  <div class="app-layout">
+    
+    <!-- Top Header -->
+    <header class="top-nav">
+      <div class="nav-brand">
+        <div class="brand-badge">
+          <span class="pulse-dot"></span>
+          <span class="brand-text">OmniRAG</span>
+          <span class="badge-tag">ENTERPRISE</span>
+        </div>
+        <span class="brand-subtitle">Production Agentic CRAG & Hybrid Vector Intelligence</span>
+      </div>
+
+      <div class="nav-metrics">
+        <div class="metric-pill" title="Total indexed chunks in vector and lexical indices">
+          <span class="metric-label">INDEXED CHUNKS:</span>
+          <span id="stat-chunks" class="metric-val">0</span>
+        </div>
+        <div class="metric-pill" title="Active embedding and synthesis engine">
+          <span class="metric-label">ENGINE:</span>
+          <span id="stat-engine" class="metric-val text-cyan">Offline Semantic Mode</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <button id="btn-architecture-modal" class="btn-ghost" title="View Full System Architecture & Interview Cheat Sheet">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          Architecture
+        </button>
+        <button id="btn-settings-modal" class="btn-ghost" title="Configure Cloud AI Keys (Gemini/Groq)">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          Settings
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="workspace-grid">
+      
+      <!-- Left Panel: Corpus Management & Pipeline Controls -->
+      <aside class="sidebar-panel">
+        <div class="panel-section">
+          <div class="section-title">
+            <span>ENTERPRISE CORPUS</span>
+            <div class="corpus-actions">
+              <button id="btn-clear-samples" class="btn-xs btn-outline" title="Remove sample datasets and keep only your uploaded documents">Clear Samples</button>
+              <button id="btn-clear-corpus" class="btn-xs text-red" title="Clear all indexed documents">Clear All</button>
+            </div>
+          </div>
+          
+          <!-- Sample Ingestion -->
+          <div class="sample-loaders">
+            <div class="sample-item" id="load-sample-nvidia">
+              <div class="sample-header">
+                <strong>NVIDIA 10-K SEC Filing</strong>
+                <span class="sample-badge">Financial</span>
+              </div>
+              <p>CapEx, Hopper/Blackwell compute, and TSMC CoWoS supply risks.</p>
+              <button class="btn-xs btn-outline">Load Sample</button>
+            </div>
+
+            <div class="sample-item" id="load-sample-rag">
+              <div class="sample-header">
+                <strong>RAG Architecture Whitepaper</strong>
+                <span class="sample-badge">Technical</span>
+              </div>
+              <p>HNSW vector graphs, BM25 RRF fusion, and Cross-Encoders.</p>
+              <button class="btn-xs btn-outline">Load Sample</button>
+            </div>
+          </div>
+
+          <!-- Document Upload Dropzone -->
+          <div class="upload-box" id="drop-zone">
+            <input type="file" id="file-input" accept=".pdf,.txt,.md,.csv" class="hidden-input">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+            <p><strong>Click to upload</strong> or drag & drop</p>
+            <span>Upload your own Resume, PDF, or Report</span>
+          </div>
+
+          <!-- Indexed Document List -->
+          <div class="doc-list-container">
+            <div class="doc-list-header-row">
+              <span class="doc-list-header">Active Indexed Documents</span>
+              <button id="btn-scope-all" class="btn-xs btn-outline active-scope">All Docs</button>
+            </div>
+            <div class="scope-status-pill" id="scope-status-pill">
+              <span>Scope:</span> <strong id="scope-target-name">Searching All Documents</strong>
+            </div>
+            <div id="doc-list" class="doc-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline Tuning -->
+        <div class="panel-section pipeline-config">
+          <div class="section-title">RETRIEVAL HYPERPARAMETERS</div>
+          
+          <div class="control-row">
+            <label for="slider-topk">Candidate Top-K: <span id="val-topk">5</span></label>
+            <input type="range" id="slider-topk" min="3" max="10" value="5" class="slider">
+          </div>
+
+          <div class="control-toggle">
+            <div class="toggle-info">
+              <strong>Agentic CRAG</strong>
+              <small>Document relevance grading & query rewrite</small>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-crag" checked>
+              <span class="slider-round"></span>
+            </label>
+          </div>
+
+          <div class="control-toggle">
+            <div class="toggle-info">
+              <strong>Cross-Encoder Reranking</strong>
+              <small>Two-stage query-passage attention scoring</small>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-rerank" checked>
+              <span class="slider-round"></span>
+            </label>
+          </div>
+
+          <div class="control-toggle">
+            <div class="toggle-info">
+              <strong>Hybrid RRF Search</strong>
+              <small>Dense Vector + BM25 Lexical Fusion</small>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-hybrid" checked disabled>
+              <span class="slider-round"></span>
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Panel: Live Chat & Execution Stream -->
+      <section class="chat-panel">
+        <div class="chat-history" id="chat-history">
+          
+          <!-- Welcome Message -->
+          <div class="chat-message bot-message">
+            <div class="message-avatar">
+              <div class="avatar-ring"></div>
+              <span>AI</span>
+            </div>
+            <div class="message-body">
+              <div class="message-author">OmniRAG Enterprise Engine</div>
+              <div class="message-content">
+                <p>Welcome to <strong>OmniRAG Enterprise</strong>. I am architected to demonstrate production-grade Generative AI, Multi-Vector indexing, and Agentic Corrective RAG (CRAG).</p>
+                <p>Unlike naive RAG systems, I mitigate hallucinations and retrieval noise by pairing <strong>Dense Vector Cosine Similarity</strong> with <strong>BM25 Lexical Search</strong> via <strong>Reciprocal Rank Fusion (RRF)</strong>, verified through <strong>Cross-Encoder Re-Ranking</strong> and the <strong>RAG Triad benchmark</strong>.</p>
+                <div class="prompt-chips">
+                  <button class="chip" data-query="What was NVIDIA's Data Center revenue and what drove its year-over-year growth?">Data Center Revenue Growth</button>
+                  <button class="chip" data-query="Explain the supply chain risks associated with TSMC and CoWoS packaging.">TSMC CoWoS Supply Risks</button>
+                  <button class="chip" data-query="How does Reciprocal Rank Fusion (RRF) combine dense and sparse search mathematically?">RRF Mathematical Formula</button>
+                  <button class="chip" data-query="What are the key differences between Hopper and Blackwell B200 GPU architectures?">Hopper vs Blackwell B200</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Chat Input Bar -->
+        <div class="chat-input-container">
+          <div class="chat-input-header">
+            <span class="pulse-dot"></span>
+            <strong>Ask Your Question:</strong> Type any manual query to search & verify facts against indexed documents
+          </div>
+          <form id="chat-form" class="chat-input-form">
+            <textarea id="chat-input" placeholder="Type your manual question here (e.g. What are the financial risks? What was the Data Center revenue?)..." rows="2"></textarea>
+            <button type="submit" id="btn-send" class="btn-primary">
+              <span>Ask AI</span>
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+          </form>
+          <div class="input-hint">💡 Press <strong>Enter</strong> to send or click <strong>Ask AI</strong> • Generates grounded answers with exact page citations [1], [2]</div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Observability, Latency Waterfall & RAG Triad Radar -->
+      <aside class="observability-panel">
+        
+        <!-- CRAG Status Banner -->
+        <div class="obs-card" id="crag-card">
+          <div class="obs-card-header">
+            <span>CRAG AGENT GRADE</span>
+            <span id="crag-badge" class="badge-status badge-pass">READY</span>
+          </div>
+          <div id="crag-explanation" class="crag-desc">Awaiting query execution...</div>
+          <div id="query-rewrites" class="rewrite-container hidden">
+            <div class="rewrite-title">Query Transformations (HyDE / Expansion):</div>
+            <ul id="rewrite-list" class="rewrite-list"></ul>
+          </div>
+        </div>
+
+        <!-- Latency Waterfall -->
+        <div class="obs-card">
+          <div class="obs-card-header">
+            <span>EXECUTION LATENCY WATERFALL</span>
+            <span id="total-latency" class="badge-tag">0 ms</span>
+          </div>
+          <div class="waterfall-bars">
+            <div class="waterfall-item">
+              <div class="wf-label">Query Transformation</div>
+              <div class="wf-bar-wrapper">
+                <div id="bar-transform" class="wf-bar bar-cyan" style="width: 0%;"></div>
+              </div>
+              <div id="val-transform" class="wf-val">0ms</div>
+            </div>
+
+            <div class="waterfall-item">
+              <div class="wf-label">Hybrid Search (Dense + BM25)</div>
+              <div class="wf-bar-wrapper">
+                <div id="bar-hybrid" class="wf-bar bar-purple" style="width: 0%;"></div>
+              </div>
+              <div id="val-hybrid" class="wf-val">0ms</div>
+            </div>
+
+            <div class="waterfall-item">
+              <div class="wf-label">Reciprocal Rank Fusion (RRF)</div>
+              <div class="wf-bar-wrapper">
+                <div id="bar-rrf" class="wf-bar bar-blue" style="width: 0%;"></div>
+              </div>
+              <div id="val-rrf" class="wf-val">0ms</div>
+            </div>
+
+            <div class="waterfall-item">
+              <div class="wf-label">Cross-Encoder Reranking</div>
+              <div class="wf-bar-wrapper">
+                <div id="bar-rerank" class="wf-bar bar-emerald" style="width: 0%;"></div>
+              </div>
+              <div id="val-rerank" class="wf-val">0ms</div>
+            </div>
+
+            <div class="waterfall-item">
+              <div class="wf-label">CRAG Evidence Grading</div>
+              <div class="wf-bar-wrapper">
+                <div id="bar-crag" class="wf-bar bar-amber" style="width: 0%;"></div>
+              </div>
+              <div id="val-crag" class="wf-val">0ms</div>
+            </div>
+
+            <div class="waterfall-item">
+              <div class="wf-label">LLM Token Generation</div>
+              <div class="wf-bar-wrapper">
+                <div id="bar-llm" class="wf-bar bar-pink" style="width: 0%;"></div>
+              </div>
+              <div id="val-llm" class="wf-val">0ms</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RAG Triad Automated Evaluation Card -->
+        <div class="obs-card">
+          <div class="obs-card-header">
+            <span>RAG TRIAD BENCHMARK</span>
+            <span id="triad-status" class="badge-status badge-pass">PASSED</span>
+          </div>
+
+          <div class="triad-meters">
+            <div class="meter-box">
+              <div class="meter-circle">
+                <svg viewBox="0 0 36 36" class="circular-chart">
+                  <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path id="circle-precision" class="circle bar-cyan" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <div id="score-precision" class="meter-number">--%</div>
+              </div>
+              <div class="meter-name">Context Precision</div>
+              <small>Signal-to-noise ratio</small>
+            </div>
+
+            <div class="meter-box">
+              <div class="meter-circle">
+                <svg viewBox="0 0 36 36" class="circular-chart">
+                  <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path id="circle-faithfulness" class="circle bar-emerald" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <div id="score-faithfulness" class="meter-number">--%</div>
+              </div>
+              <div class="meter-name">Faithfulness</div>
+              <small>Grounded statements</small>
+            </div>
+
+            <div class="meter-box">
+              <div class="meter-circle">
+                <svg viewBox="0 0 36 36" class="circular-chart">
+                  <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path id="circle-relevance" class="circle bar-purple" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <div id="score-relevance" class="meter-number">--%</div>
+              </div>
+              <div class="meter-name">Answer Relevance</div>
+              <small>Query alignment</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Retrieved Passages Attribution Drawer -->
+        <div class="obs-card sources-card">
+          <div class="obs-card-header">
+            <span>RETRIEVED PASSAGES & PROVENANCE</span>
+            <span id="sources-count" class="badge-tag">0 Chunks</span>
+          </div>
+          <div id="sources-container" class="sources-list">
+            <div class="empty-sources">Ask a question to inspect retrieved source chunks and cross-attention scores.</div>
+          </div>
+        </div>
+
+      </aside>
+
+    </main>
+
+    <!-- Source Chunk Provenance Modal Drawer -->
+    <div id="provenance-modal" class="modal-overlay hidden">
+      <div class="modal-content drawer-content">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span id="modal-citation-badge" class="citation-badge">[1]</span>
+            <h3 id="modal-doc-title">Document Title</h3>
+          </div>
+          <button id="btn-close-modal" class="btn-icon">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="source-metadata-grid">
+            <div><strong>Section:</strong> <span id="modal-section">-</span></div>
+            <div><strong>Page Number:</strong> <span id="modal-page">-</span></div>
+            <div><strong>Retrieval Method:</strong> <span id="modal-method" class="text-cyan">-</span></div>
+            <div><strong>Cross-Encoder Relevance:</strong> <span id="modal-score" class="text-emerald">-</span></div>
+          </div>
+          <div class="chunk-full-content">
+            <h4>Raw Grounded Chunk Content:</h4>
+            <div id="modal-chunk-text" class="code-block"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Architecture Modal -->
+    <div id="architecture-modal" class="modal-overlay hidden">
+      <div class="modal-content arch-modal-content">
+        <div class="modal-header">
+          <h3>OmniRAG System Architecture & Design Internals</h3>
+          <button id="btn-close-arch-modal" class="btn-icon">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="arch-tabs">
+            <button class="arch-tab active" data-tab="dataflow">System Dataflow</button>
+            <button class="arch-tab" data-tab="rrf">RRF Mathematical Formulation</button>
+            <button class="arch-tab" data-tab="crag">CRAG State Machine</button>
+            <button class="arch-tab" data-tab="triad">RAG Triad Metrics</button>
+          </div>
+
+          <div class="arch-tab-content" id="tab-dataflow">
+            <h4>End-to-End Execution Pipeline</h4>
+            <div class="ascii-diagram">
++------------------+      +-------------------------+
+|    User Query    | ---> |  Query Transformation   | (HyDE / Acronym Expansion)
++------------------+      +-------------------------+
+                                       |
+              +------------------------+------------------------+
+              |                                                 |
+              v                                                 v
+  +-----------------------+                         +-----------------------+
+  |  Dense Vector Search  |                         |   BM25 Sparse Search  |
+  |  (Cosine Sim, HNSW)   |                         |   (IDF Token Sat)     |
+  +-----------------------+                         +-----------------------+
+              |                                                 |
+              +------------------------+------------------------+
+                                       v
+                     +-----------------------------------+
+                     |   Reciprocal Rank Fusion (RRF)    | (Combines Dense & Sparse)
+                     +-----------------------------------+
+                                       v
+                     +-----------------------------------+
+                     |   Cross-Encoder Re-Ranking Stage  | (Top-20 -> Top-5 Candidates)
+                     +-----------------------------------+
+                                       v
+                     +-----------------------------------+
+                     |   Corrective RAG (CRAG) Grader    | (Checks Evidence Sufficiency)
+                     +-----------------------------------+
+                                       v
+                     +-----------------------------------+
+                     |    Grounded LLM Synthesizer       | (Streaming Citations [1], [2])
+                     +-----------------------------------+
+            </div>
+          </div>
+
+          <div class="arch-tab-content hidden" id="tab-rrf">
+            <h4>Reciprocal Rank Fusion (RRF) Formulation</h4>
+            <p>RRF solves the problem of combining score distributions with different dimensions and scales (cosine similarity in [-1, 1] vs unbounded BM25 scores):</p>
+            <div class="code-block">
+RRF_Score(d) = (w_dense / (k + rank_dense(d))) + (w_sparse / (k + rank_sparse(d)))
+
+Constants in OmniRAG:
+- k = 60 (rank smoothing constant, prevents top items from dominating)
+- w_dense = 0.65 (semantic importance)
+- w_sparse = 0.35 (exact keyword importance)
+            </div>
+          </div>
+
+          <div class="arch-tab-content hidden" id="tab-crag">
+            <h4>Corrective RAG (CRAG) State Machine</h4>
+            <div class="code-block">
+[Candidate Chunks] ---> [Evidence Evaluation Node]
+                               |
+       +-----------------------+-----------------------+
+       | (>0.65 Confidence)    | (0.38 - 0.65)         | (<0.38 Confidence)
+       v                       v                       v
+ [CORRECT State]       [AMBIGUOUS State]       [INCORRECT State]
+  Synthesize Answer     Reformulate Query &     Activate Guardrail:
+  with exact badges     trigger secondary pass  Refuse to hallucinate
+            </div>
+          </div>
+
+          <div class="arch-tab-content hidden" id="tab-triad">
+            <h4>The RAG Triad (Production Evaluation)</h4>
+            <p>To avoid subjective impressions in production and interviews, OmniRAG calculates:</p>
+            <ul>
+              <li><strong>Context Precision</strong>: What fraction of retrieved context chunks are directly relevant to the user query?</li>
+              <li><strong>Faithfulness (Groundedness)</strong>: Are the factual statements generated by the LLM strictly grounded in the context without fabricated numbers?</li>
+              <li><strong>Answer Relevance</strong>: Does the answer address the question asked rather than giving a generic reply?</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Engine & API Configuration</h3>
+          <button id="btn-close-settings" class="btn-icon">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="api-key-banner">
+            <div class="banner-title">✨ Is an API key mandatory?</div>
+            <p><strong>No, basic search works offline</strong>, but offline mode only copies matching sentences. To enable <strong>true Generative AI</strong> (intelligent reasoning, summarizing any document, conversational chat), connect Google Gemini.</p>
+            <div class="banner-highlight">
+              <strong>Google Gemini API is 100% FREE!</strong> No credit card required.
+              <a href="https://aistudio.google.com/app/apikey" target="_blank" class="banner-link">Get Free Gemini API Key at Google AI Studio &rarr;</a>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="gemini-key">Google Gemini API Key (Recommended):</label>
+            <input type="password" id="gemini-key" placeholder="AIzaSy..." class="form-input">
+            <small>Enables Gemini 1.5/2.5 Flash intelligent generative synthesis & reasoning.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="groq-key">Groq API Key (Optional):</label>
+            <input type="password" id="groq-key" placeholder="gsk_..." class="form-input">
+            <small>Free at console.groq.com for ultra-fast Llama-3.3 70B inference.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="provider-select">Active Synthesis Engine:</label>
+            <select id="provider-select" class="form-input">
+              <option value="auto">Auto (Prefer Gemini/Groq if key present, fallback to offline)</option>
+              <option value="gemini">Gemini API Only</option>
+              <option value="groq">Groq Llama 3.3 Only</option>
+              <option value="offline">Deterministic Offline Extractive Engine</option>
+            </select>
+          </div>
+
+          <div class="modal-footer">
+            <button id="btn-save-settings" class="btn-primary">Save Configuration</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js?v=3"></script>
+</body>
+</html>
